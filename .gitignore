@@ -1,3 +1,9 @@
 
 # Humonex MCP session state
 .humonex/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
