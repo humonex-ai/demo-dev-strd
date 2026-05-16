@@ -1,0 +1,42 @@
+# =============================================================================
+# Add new issues to org Project
+# =============================================================================
+# Dropped into each project repo at `.github/workflows/add-to-project.yml` by
+# install.sh. Substitutes:
+#   https://github.com/orgs/humonex-ai/projects/4 -> https://github.com/orgs/<org>/projects/<n>
+#
+# Replaces the Project's native auto-add (limited to one repo per rule).
+# With this workflow in every repo, any new or reopened issue lands on the
+# org Project automatically.
+#
+# Authentication: GitHub App. Mints a short-lived (~1hr) installation token
+# at runtime — no long-lived PAT in CI.
+#
+# Required org-level Actions secrets (same secrets used by gh-sync.yml):
+#   APP_ID           — numeric App ID
+#   APP_PRIVATE_KEY  — full PEM contents of the App's private key
+# =============================================================================
+
+name: Add to org Project
+
+on:
+  issues:
+    types: [opened, reopened, transferred]
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint App installation token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Add issue to org Project
+        uses: actions/add-to-project@v1
+        with:
+          project-url: https://github.com/orgs/humonex-ai/projects/4
+          github-token: ${{ steps.app-token.outputs.token }}

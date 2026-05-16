@@ -1,0 +1,33 @@
+# =============================================================================
+# GitHub sync — caller workflow
+# =============================================================================
+# Dropped into each project repo at `.github/workflows/gh-sync.yml` by
+# `install.sh`. Calls the centralized reusable workflow in
+# humonex-ai/dev-standards so logic stays in one place — update the
+# dev-standards repo, every project picks it up automatically.
+#
+# Required Actions secrets (set at the org level, accessible to all repos):
+#   APP_ID           — numeric App ID of the Humonex Dev Standards GitHub App
+#   APP_PRIVATE_KEY  — full PEM contents of the App's private key
+#
+# The reusable workflow mints a short-lived (~1hr) installation token at
+# runtime, so no long-lived PAT sits in CI.
+#
+# To pin behavior for this repo, replace @main with a tag:
+#   uses: humonex-ai/dev-standards/.github/workflows/gh-sync.yml@v1.0.0
+# =============================================================================
+
+name: GitHub Sync
+
+on:
+  pull_request:
+    types: [opened, closed]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  sync:
+    uses: humonex-ai/dev-standards/.github/workflows/gh-sync.yml@main
+    secrets:
+      APP_ID:          ${{ secrets.APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}

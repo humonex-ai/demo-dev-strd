@@ -1,0 +1,54 @@
+# =============================================================================
+# Humonex Task issue form
+# =============================================================================
+# Dropped into each project repo at `.github/ISSUE_TEMPLATE/task.yml` by
+# install.sh. Standardizes the fields the org Project's auto-add workflow
+# expects: clear title, repro/spec body, and Type=Task.
+# =============================================================================
+
+name: Task
+description: Plannable engineering task
+title: "[Task] "
+labels: ["task"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What does this task accomplish?
+      placeholder: One or two sentences.
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Context, scope, references. Anything the developer needs to start work.
+    validations:
+      required: false
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done
+      description: What does done look like? Bullet list of acceptance criteria.
+      placeholder: |
+        - User can update their profile picture
+        - Image is resized to 256x256 on upload
+        - Mobile responsive at 320px width
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+        - Urgent
+      default: 1
+    validations:
+      required: true
